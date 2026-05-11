@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consolidation MCQ Test — ACCA FA</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f7f5f0;
+  --bg-card: #fbfaf6;
+  --text: #1a1a1a;
+  --text-muted: #5f5e5a;
+  --text-faded: #888780;
+  --border: rgba(0,0,0,0.12);
+  --border-strong: rgba(0,0,0,0.25);
+  --accent: #185FA5;
+  --accent-soft: #E6F1FB;
+  --accent-text: #0C447C;
+  --correct: #3B6D11;
+  --correct-soft: #EAF3DE;
+  --correct-text: #27500A;
+  --wrong: #A32D2D;
+  --wrong-soft: #FCEBEB;
+  --wrong-text: #791F1F;
+  --amber: #854F0B;
+  --amber-soft: #FAEEDA;
+  --purple: #534AB7;
+  --purple-soft: #EEEDFE;
+  --purple-text: #3C3489;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg-soft);
+  -webkit-font-smoothing: antialiased;
+}
+.app { max-width: 760px; margin: 0 auto; padding: 24px 20px 80px; }
+header.banner { margin-bottom: 28px; padding: 20px 24px; background: var(--bg); border-radius: 12px; border: 1px solid var(--border); }
+header.banner h1 { margin: 0 0 4px; font-size: 22px; font-weight: 600; }
+header.banner .sub { font-size: 14px; color: var(--text-muted); }
+.progress-bar { height: 6px; background: var(--bg-soft); border-radius: 999px; margin-top: 14px; overflow: hidden; border: 1px solid var(--border); }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.3s ease; }
+.progress-text { font-size: 13px; color: var(--text-muted); margin-top: 8px; display: flex; justify-content: space-between; }
+.card { background: var(--bg); border-radius: 12px; border: 1px solid var(--border); padding: 28px; margin-bottom: 20px; }
+.q-number { font-size: 13px; color: var(--text-faded); font-weight: 500; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px; }
+.q-text { font-size: 16px; line-height: 1.7; margin-bottom: 20px; }
+.q-data { background: var(--bg-soft); border-radius: 8px; padding: 14px 18px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; font-size: 14px; line-height: 1.6; margin: 14px 0; white-space: pre; overflow-x: auto; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+.option { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); cursor: pointer; transition: all 0.15s ease; font-size: 15px; line-height: 1.55; text-align: left; width: 100%; font-family: inherit; color: var(--text); }
+.option:hover { border-color: var(--border-strong); background: var(--bg-soft); }
+.option.selected { border-color: var(--accent); background: var(--accent-soft); }
+.option-letter { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; color: var(--text-muted); }
+.option.selected .option-letter { background: var(--accent); color: white; }
+.option-text { flex: 1; }
+.numeric-input-wrap { margin-top: 18px; display: flex; align-items: center; gap: 12px; }
+.numeric-input-wrap label { font-size: 14px; color: var(--text-muted); }
+.numeric-input { flex: 1; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; font-family: inherit; background: var(--bg); }
+.numeric-input:focus { outline: none; border-color: var(--accent); }
+.actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; }
+button.nav-btn { padding: 12px 24px; border: 1px solid var(--border); background: var(--bg); border-radius: 8px; cursor: pointer; font-size: 15px; font-family: inherit; font-weight: 500; color: var(--text); transition: all 0.15s ease; }
+button.nav-btn:hover:not(:disabled) { background: var(--bg-soft); border-color: var(--border-strong); }
+button.nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+button.nav-btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+button.nav-btn.primary:hover:not(:disabled) { background: #0C447C; }
+button.nav-btn.danger { background: var(--wrong); color: white; border-color: var(--wrong); }
+.start-screen, .results-screen { text-align: center; padding: 40px 20px; }
+.start-screen h2, .results-screen h2 { font-size: 26px; margin: 0 0 12px; font-weight: 600; }
+.start-screen p, .results-screen .score-line { font-size: 16px; color: var(--text-muted); margin-bottom: 24px; }
+.score-display { display: inline-flex; flex-direction: column; align-items: center; padding: 28px 48px; background: var(--accent-soft); border-radius: 16px; margin: 16px 0 28px; }
+.score-display .big { font-size: 48px; font-weight: 600; color: var(--accent-text); line-height: 1; }
+.score-display .pct { font-size: 16px; color: var(--accent-text); margin-top: 8px; }
+.results-list { text-align: left; margin-top: 30px; }
+.result-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+.result-header { padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background 0.15s; }
+.result-header:hover { background: var(--bg-soft); }
+.result-mark { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+.result-mark.correct { background: var(--correct-soft); color: var(--correct-text); }
+.result-mark.wrong { background: var(--wrong-soft); color: var(--wrong-text); }
+.result-mark.skipped { background: var(--bg-soft); color: var(--text-faded); }
+.result-info { flex: 1; }
+.result-title { font-size: 15px; font-weight: 500; }
+.result-summary { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.result-chevron { color: var(--text-faded); font-size: 14px; transition: transform 0.2s; }
+.result-item.open .result-chevron { transform: rotate(90deg); }
+.result-body { display: none; padding: 0 18px 20px; border-top: 1px solid var(--border); padding-top: 18px; }
+.result-item.open .result-body { display: block; }
+.layer { margin-top: 18px; padding: 14px 18px; border-radius: 8px; border-left: 3px solid; }
+.layer h4 { margin: 0 0 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.layer p { margin: 0 0 8px; font-size: 14.5px; line-height: 1.65; }
+.layer p:last-child { margin-bottom: 0; }
+.layer.solution { background: var(--correct-soft); border-left-color: var(--correct); }
+.layer.solution h4 { color: var(--correct-text); }
+.layer.explanation { background: var(--accent-soft); border-left-color: var(--accent); }
+.layer.explanation h4 { color: var(--accent-text); }
+.layer.trap { background: var(--amber-soft); border-left-color: var(--amber); }
+.layer.trap h4 { color: var(--amber); }
+.layer pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; background: rgba(0,0,0,0.04); padding: 10px 12px; border-radius: 6px; margin: 8px 0; white-space: pre-wrap; overflow-x: auto; }
+.user-answer-shown { font-size: 13px; color: var(--text-muted); margin-top: 8px; padding: 8px 12px; background: var(--bg-soft); border-radius: 6px; }
+.tag { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: 999px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 6px; }
+.tag.numeric { background: var(--purple-soft); color: var(--purple-text); }
+.tag.mcq { background: var(--bg-soft); color: var(--text-muted); }
+.results-actions { display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+@media (max-width: 540px) {
+  .app { padding: 14px; }
+  .card { padding: 20px 18px; }
+  .q-data { font-size: 12.5px; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+const QUESTIONS = [
+  {
+    id: 'q1', type: 'mcq', topic: 'Goodwill',
+    text: "At 1 January 20X4, Yogi acquired 80% of the share capital of Bear for $1,400,000. At that date the share capital of Bear consisted of 600,000 equity shares of $0.50 each and its reserves were $800,000. The fair value of the non-controlling interest was valued at $300,000 at the date of acquisition.\n\nIn the consolidated statement of financial position of Yogi and its subsidiary Bear at 31 December 20X8, what amount should appear for goodwill?",
+    options: [{label:'A',text:'$600,000'},{label:'B',text:'$300,000'},{label:'C',text:'$800,000'},{label:'D',text:'$Nil'}],
+    answer: 'A',
+    solution: "Goodwill = Cost + FV of NCI − FV of net assets at acquisition\n= $1,400,000 + $300,000 − ($300,000 share capital + $800,000 reserves)\n= $1,700,000 − $1,100,000\n= $600,000\n\nShare capital = 600,000 × $0.50 = $300,000 (NOT $600,000).",
+    explanation: "Goodwill is calculated at the date of acquisition only — it does NOT change over time (unless impaired). The question gives a 31 December 20X8 reporting date to test whether you wrongly try to update goodwill for post-acquisition movements. Goodwill stays fixed at the acquisition date figure.\n\nThe FV of NCI is given directly ($300,000) so the full goodwill method applies.",
+    trap: "Two common mistakes: (1) Using $600,000 for share capital (600,000 × $1) instead of correctly applying the $0.50 nominal value. (2) Trying to update goodwill for post-acquisition movements — goodwill is fixed at the date of acquisition (unless impaired)."
+  },
+  {
+    id: 'q2', type: 'mcq', topic: 'Group Reserves',
+    text: "At 1 January 20X8, Tom Co acquired 80% of the share capital of Jerry Co for $100,000. At that date the share capital of Jerry Co consisted of 50,000 equity shares of $1 each and its reserves were $30,000. At 31 December 20X9 the reserves of Tom Co and Jerry Co were as follows:\n\nTom Co: $400,000\nJerry Co: $50,000\n\nWhat amount should appear for group reserves?",
+    options: [{label:'A',text:'$400,000'},{label:'B',text:'$438,000'},{label:'C',text:'$416,000'},{label:'D',text:'$404,000'}],
+    answer: 'C',
+    solution: "Group reserves = Parent's own reserves + Parent's % × Subsidiary's POST-ACQ reserves\n\nJerry's post-acq reserves = $50,000 (now) − $30,000 (at acq) = $20,000\nParent's share = 80% × $20,000 = $16,000\n\nGroup reserves = $400,000 + $16,000 = $416,000",
+    explanation: "Only POST-acquisition reserves are split between parent and NCI. Pre-acquisition reserves were already paid for as part of the goodwill calculation — including them would be double-counting.\n\nAt 80% ownership, parent's share of post-acq is 80% (the other 20% belongs to NCI).",
+    trap: "Option B ($438,000) wrongly adds 80% of Jerry's FULL current reserves. Option D ($404,000) uses only $5,000 of post-acq. Always: Now − At-acq, then apply parent's %."
+  },
+  {
+    id: 'q3', type: 'mcq', topic: 'Goodwill',
+    text: "At 1 January 20X6, Fred Co acquired 75% of the share capital of Barney Co for $65,000. At that date Barney Co's share capital consisted of 20,000 equity shares of $1 each and its reserves were $40,000. The fair value of the non-controlling interest was $20,000 at 1 January 20X6.\n\nWhat amount should appear for goodwill?",
+    options: [{label:'A',text:'$45,000'},{label:'B',text:'$15,000'},{label:'C',text:'$25,000'},{label:'D',text:'$5,000'}],
+    answer: 'C',
+    solution: "Goodwill = Cost + FV of NCI − Net assets at acquisition\n= $65,000 + $20,000 − ($20,000 + $40,000)\n= $85,000 − $60,000\n= $25,000",
+    explanation: "Same approach as Q1 — fixed at acquisition date. Share capital here is 20,000 × $1 = $20,000.\n\nThe 31 December 20X9 reporting date is a distractor — goodwill at acquisition doesn't change.",
+    trap: "Option A ($45,000) forgets to add FV of NCI. Option B ($15,000) wrongly subtracts FV of NCI instead of adding. Always: Cost + FV of NCI − Net assets. NCI is part of total consideration."
+  },
+  {
+    id: 'q4', type: 'mcq', topic: 'NCI',
+    text: "At 1 January 20X6, Gary Co acquired 60% of the share capital of Barlow Co for $35,000. At that date Barlow's share capital consisted of 20,000 equity shares of $1 each and its reserves were $10,000. At 31 December 20X9 reserves were: Gary $40,000; Barlow $15,000. FV of NCI at acquisition was $25,000.\n\nWhat amount should appear for non-controlling interest?",
+    options: [{label:'A',text:'$25,000'},{label:'B',text:'$27,000'},{label:'C',text:'$28,000'},{label:'D',text:'$31,000'}],
+    answer: 'B',
+    solution: "NCI = FV of NCI at acquisition + NCI% × Subsidiary's post-acq reserves\n\nBarlow's post-acq reserves = $15,000 − $10,000 = $5,000\nNCI share = 40% × $5,000 = $2,000\n\nNCI = $25,000 + $2,000 = $27,000",
+    explanation: "NCI builds up over time from its starting fair value. Two components: (1) what NCI was worth at acquisition, and (2) NCI's share of any post-acquisition growth in the subsidiary's reserves.\n\nNCI never includes any of the PARENT's reserves.",
+    trap: "Option A ($25,000) forgets post-acq build-up. Option C ($28,000) likely uses 60% instead of 40% for NCI share. Always: NCI % = 100% − Parent's %."
+  },
+  {
+    id: 'q5', type: 'mcq', topic: 'NCI',
+    text: "At 1 January 20X8, Williams acquired 65% of Barlow for $300,000. Barlow's share capital was 400,000 shares of $0.50 each; reserves $60,000. At 31 December 20X9 reserves were: Williams $200,000; Barlow $75,000. FV of NCI at acquisition was $50,000.\n\nWhat amount should appear for non-controlling interest?",
+    options: [{label:'A',text:'$55,250'},{label:'B',text:'$50,000'},{label:'C',text:'$76,250'},{label:'D',text:'$5,250'}],
+    answer: 'A',
+    solution: "NCI = FV at acq + NCI% × post-acq reserves\n\nBarlow's post-acq reserves = $75,000 − $60,000 = $15,000\nNCI% = 35% (since Williams owns 65%)\nNCI share = 35% × $15,000 = $5,250\n\nNCI = $50,000 + $5,250 = $55,250",
+    explanation: "Same NCI formula as Q4 with different numbers. The share capital of $0.50 nominal is a distractor — only the reserves figure matters for the NCI post-acq calculation.",
+    trap: "Option B ($50,000) forgets post-acq build-up. Option C ($76,250) wrongly uses 35% × $75,000 (full reserves) instead of post-acq only. Option D ($5,250) is just the post-acq movement portion alone."
+  },
+  {
+    id: 'q6', type: 'mcq', topic: 'Intercompany Balances',
+    text: "Extracts from statements of financial position of Dora and Diego ($'000):\n\nInventory: Dora 200 / Diego 100\nReceivables: Dora 540 / Diego 160\nCash: Dora 240 / Diego 80\nPayables: Dora 320 / Diego 180\n\nDora's SOFP includes a receivable of $40,000 due from Diego.\n\nIn the consolidated SOFP what will be the correct amounts for receivables and payables?",
+    options: [
+      {label:'A',text:'Payables $460,000 / Receivables $660,000'},
+      {label:'B',text:'Payables $306,000 / Receivables $660,000'},
+      {label:'C',text:'Payables $294,000 / Receivables $694,000'},
+      {label:'D',text:'Payables $294,000 / Receivables $654,000'}
+    ],
+    answer: 'A',
+    solution: "Intercompany balance: $40,000 cancels from BOTH sides.\n\nReceivables = 540 + 160 − 40 = $660,000\nPayables = 320 + 180 − 40 = $460,000",
+    explanation: "When one group company owes another, both the receivable AND the payable cancel. The group cannot owe itself. Symmetric — same $40,000 cancels on each side.\n\nIf Dora has a $40,000 receivable from Diego, Diego must have a $40,000 payable to Dora.",
+    trap: "Common mistake: eliminating on only ONE side. Both sides must be reduced by the same amount. Don't fall for options where only one side is adjusted."
+  },
+  {
+    id: 'q7', type: 'mcq', topic: 'URP',
+    text: "Salt owns 70% of Pepper and sold goods to Pepper valued at $1,500 at a mark-up of 20%. 40% of these goods were sold on by Pepper to external parties at the year end.\n\nWhat is the provision for unrealised profit (PURP) adjustment in the group financial statements?",
+    options: [{label:'A',text:'$100'},{label:'B',text:'$150'},{label:'C',text:'$240'},{label:'D',text:'$120'}],
+    answer: 'B',
+    solution: "Mark-up 20% → profit fraction of sale = 20/120 = 1/6\nTotal profit on sale = $1,500 × 1/6 = $250\n\n40% sold externally → 60% still in inventory\n\nURP = $250 × 60% = $150",
+    explanation: "Two-step URP: (1) find profit using correct mark-up/margin rule, (2) apply UNSOLD fraction.\n\nThe question gives SOLD fraction (40%). You need 1 − 40% = 60% unsold.\n\nMark-up 20%: cost 100, profit 20, sale 120. Profit fraction of sale = 20/120 = 1/6.",
+    trap: "Option C ($240) wrongly treats 20% as margin (profit fraction would be 1/5) and applies wrong logic. Option A ($100) uses 40% sold fraction instead of 60% unsold. ALWAYS: URP is based on UNSOLD goods."
+  },
+  {
+    id: 'q8', type: 'numeric', topic: 'Consolidated NCA',
+    text: "Stress acquired 100% of Full on 1 October 20X7 when Full's retained earnings were $300,000. Full's SOFP at 30 September 20X9:\nPPE $1,800k / Current assets $1,000k\nShare capital $1,600k / R.E $500k / Current liabilities $700k\n\nOn 1 October 20X7, the fair value of land within Full's NCA was $400,000 greater than carrying amount. Stress had NCA at 30 September 20X9 at carrying amount $2.2m.\n\nWhat is the total NCA on the consolidated SOFP at 30 September 20X9?\n\nEnter answer in $ (e.g. 4400000):",
+    answer: 4400000, tolerance: 0, answerDisplay: "$4,400,000",
+    solution: "Consolidated NCA = Stress's NCA + Full's PPE + FV uplift on land\n= $2,200,000 + $1,800,000 + $400,000\n= $4,400,000\n\nLand is not depreciated (indefinite life), so the full $400,000 uplift remains.",
+    explanation: "Fair value adjustments at acquisition stay with the asset throughout consolidation. For land specifically, since it has indefinite useful life, the full uplift remains at every reporting date — no depreciation.\n\nIf this had been a building or plant, you'd need to depreciate the uplift over remaining useful life.",
+    trap: "Forgetting the FV uplift entirely gives $4,000,000 (wrong). Trying to depreciate land is also wrong. Stress's investment in Full doesn't appear — it was eliminated in goodwill calculation."
+  },
+  {
+    id: 'q9', type: 'mcq', topic: 'URP',
+    text: "Hard acquired 80% of Work on 1 April 20X8. During the year Hard sold Work goods for $24m (originally cost $18m). At year-end, Work had sold half to third parties.\n\nWhat is the PURP adjustment for the year ended 31 March 20X9?",
+    options: [{label:'A',text:'$1,000,000'},{label:'B',text:'$6,000,000'},{label:'C',text:'$3,000,000'},{label:'D',text:'$7,000,000'}],
+    answer: 'C',
+    solution: "Total profit on sale = $24m − $18m = $6,000,000\nHalf still unsold → URP = $6,000,000 × 50% = $3,000,000",
+    explanation: "When both sale price AND cost are given, just subtract — no mark-up or margin formula needed.\n\nThen apply unsold fraction (half = 50%).\n\nDirection: Hard (parent) was seller, so URP hits parent's R.E only. NCI unaffected.",
+    trap: "Option B ($6,000,000) is the TOTAL profit — forgets to apply unsold fraction. Always: total profit × fraction UNSOLD."
+  },
+  {
+    id: 'q10', type: 'mcq', topic: 'NCI Share of Profit',
+    text: "Hard acquired 80% of Work on 1 April 20X8. Work's profit for the year was $6,000,000. Hard sold goods to Work for $24m (cost $18m); half remained unsold.\n\nWhat is the total share of group profit attributable to non-controlling interest?",
+    options: [{label:'A',text:'$1,200,000'},{label:'B',text:'$4,800,000'},{label:'C',text:'$3,630,000'},{label:'D',text:'$1,440,000'}],
+    answer: 'A',
+    solution: "NCI's share = NCI% × Work's profit (NO URP adjustment because Hard was seller)\n= 20% × $6,000,000\n= $1,200,000",
+    explanation: "URP direction rule: Hard (parent) sold to Work. URP hits parent's R.E only. NCI is NOT affected — the unrealised profit sits in parent's books.\n\nIf Work had been the seller, you'd reduce Work's profit by URP first, then apply NCI%.",
+    trap: "Option D ($1,440,000) wrongly tries to ADD URP to NCI share. Option B ($4,800,000) seems to use parent's share. Only S-as-seller URPs flow through NCI. When P sells, NCI is untouched."
+  },
+  {
+    id: 'q11', type: 'mcq', topic: 'Revenue & COS',
+    text: "Hard acquired 80% of Work on 1 April 20X8. Revenue: Hard $120m / Work $48m. COS: Hard $84m / Work $40m. Hard sold Work goods for $24m (cost $18m); half remained unsold.\n\nWhat is the total revenue and cost of sales for the consolidated P&L?",
+    options: [
+      {label:'A',text:'Revenue $144m / COS $100m'},
+      {label:'B',text:'Revenue $168m / COS $97.4m'},
+      {label:'C',text:'Revenue $192m / COS $100.6m'},
+      {label:'D',text:'Revenue $144m / COS $103m'}
+    ],
+    answer: 'D',
+    solution: "Revenue = Hard + Work − intercompany = $120m + $48m − $24m = $144m\n\nCost of sales = Hard + Work − intercompany + URP\n= $84m + $40m − $24m + $3m\n= $103m",
+    explanation: "Two adjustments to COS:\n1. Eliminate intercompany sale (subtract)\n2. ADD URP back to COS (this reduces gross profit, correct for unrealised inventory)\n\nWhy add URP to COS? Unsold goods sit in Work's inventory at marked-up price. Adding URP to COS reduces gross profit, properly reflecting the group hasn't made that profit yet.",
+    trap: "Option A ($100m COS) forgets URP. Option B has wrong arithmetic. Always: revenue ELIMINATES intercompany sale, COS ELIMINATES sale AND ADDS URP."
+  },
+  {
+    id: 'q12', type: 'numeric', topic: 'Consolidated PPE',
+    text: "Really acquired 75% of Hard on 1 January 20X9. Really's PPE = $1,918k. Hard's PPE = $1,960k. Really also acquired 30% of Work (associate). No fair value adjustments.\n\nWhat is the amount for property, plant and equipment to be included in the consolidated SOFP?\n\nEnter answer in $ (e.g. 3878000):",
+    answer: 3878000, tolerance: 0, answerDisplay: "$3,878,000",
+    solution: "Consolidated PPE = Really's PPE + Hard's PPE\n= $1,918,000 + $1,960,000\n= $3,878,000\n\nWork is an associate (30%) — its PPE is NOT added line by line. Only the equity method 'Investment in associate' single line appears.",
+    explanation: "Subsidiaries: full line-by-line consolidation (100% regardless of ownership %).\nAssociates: equity method — single line on SOFP, no individual asset lines added.\n\nThe 30% in Work means Work is an associate. Its PPE figure is irrelevant for line-by-line consolidation.",
+    trap: "Don't add Work's PPE at all. Associates NEVER have their individual assets added. Also: don't add only 75% of Hard's PPE — subsidiaries always at 100%."
+  },
+  {
+    id: 'q13', type: 'mcq', topic: 'Group R.E',
+    text: "Really acquired 75% of Hard on 1 January 20X9 when Hard had retained LOSSES of $112,000. On 31 December 20X9, Really acquired 30% of Work when Work had retained earnings of $280,000. At year-end: Really's R.E $2,464,000; Hard's R.E $1,204,000.\n\nWhat is the amount for retained earnings on the consolidated SOFP?",
+    options: [{label:'A',text:'$3,959,200'},{label:'B',text:'$3,451,000'},{label:'C',text:'$3,735,200'},{label:'D',text:'$3,740,800'}],
+    answer: 'B',
+    solution: "Group R.E = Really's own R.E + 75% × Hard's post-acq R.E + 30% × Work's post-acq R.E\n\nHard's post-acq R.E = $1,204,000 − (−$112,000) = $1,316,000\nReally's share of Hard's post-acq = 75% × $1,316,000 = $987,000\n\nWork acquired 31 Dec 20X9 (year-end) → zero post-acq period → zero contribution\n\nGroup R.E = $2,464,000 + $987,000 + $0 = $3,451,000",
+    explanation: "Two unusual features:\n1. Hard had retained LOSSES at acquisition (−$112,000). Post-acq movement = Now − At-acq = $1,204,000 − (−$112,000) = $1,316,000. Treat the negative starting point carefully — subtracting a negative adds it back.\n\n2. Work was acquired ON the year-end date. Zero post-acq period. Work's $280k R.E at acquisition is all pre-acq and contributes nothing to consolidated R.E.",
+    trap: "Biggest trap: treating Hard's −$112,000 as $0 or +$112,000. Always: Now minus At-acq with correct signs. Second trap: forgetting that an associate acquired ON the year-end has zero post-acq period."
+  },
+  {
+    id: 'q14', type: 'mcq', topic: 'Theory',
+    text: "Which of the following statements is most likely to indicate an investment by one entity in another which should be recognised and accounted for as an associate?",
+    options: [
+      {label:'A',text:'Ownership of 100% of the equity shares of another entity'},
+      {label:'B',text:'Ownership of over 50% and less than 100% of the equity shares of another entity'},
+      {label:'C',text:'Ownership of between 20% and 50% of the equity shares of another entity'},
+      {label:'D',text:'Ownership of less than 20% of the equity shares in another entity'}
+    ],
+    answer: 'C',
+    solution: "Associate = 20% to 50% ownership = significant influence (but not control)\n\nThe correct answer is C.",
+    explanation: "Three ownership categories:\n• 0-20%: Simple investment (IFRS 9) — held at cost or FV\n• 20-50%: Associate (IAS 28) — equity method\n• Over 50%: Subsidiary (IFRS 10) — full consolidation\n\n'Significant influence' is the defining feature of an associate — the investor can influence decisions but cannot control.",
+    trap: "Don't confuse boundaries. Exactly 20% is normally an associate. Exactly 50% is normally an associate (not 'over 50%'). Control requires more than 50% of voting rights."
+  },
+  {
+    id: 'q15', type: 'mcq', topic: 'Theory',
+    text: "IFRS 10 specifies three necessary elements to determine whether or not one company controls another.\n\nWhich of the following is NOT one of the three necessary elements?",
+    options: [
+      {label:'A',text:'Power over the other entity'},
+      {label:'B',text:'Exposure or rights to variable returns from involvement in the other entity'},
+      {label:'C',text:'The ability to use power over the other entity to affect the amount of investor returns'},
+      {label:'D',text:'The ability to exercise significant influence over another entity'}
+    ],
+    answer: 'D',
+    solution: "The three elements of control under IFRS 10:\n1. Power over the investee\n2. Exposure to variable returns\n3. Ability to use power to affect those returns\n\nD ('significant influence') is the definition of an ASSOCIATE under IAS 28, not a subsidiary under IFRS 10.",
+    explanation: "'Control' and 'significant influence' are distinct concepts:\n• Control → consolidation (subsidiary)\n• Significant influence → equity method (associate)\n\nIFRS 10's three-pillar test ensures all three are present. Missing any one means no control.",
+    trap: "Option D is the obvious wrong answer (relates to associates). Pay attention to A, B, C — all three must be present TOGETHER for control. Power without returns isn't control; returns without power isn't control."
+  },
+  {
+    id: 'q16', type: 'mcq', topic: 'Theory',
+    text: "Which of the following would normally indicate that one entity has significant influence over the activities of another?",
+    options: [
+      {label:'A',text:'Ability to appoint the majority of the board of directors of that other entity'},
+      {label:'B',text:'Ability to appoint at least one person to the board of directors of that other entity'},
+      {label:'C',text:'Ability to request that a director is appointed to the board of directors of that other entity'},
+      {label:'D',text:'Ability to submit requests regarding corporate policy to the board of directors of that other entity'}
+    ],
+    answer: 'B',
+    solution: "Significant influence = ability to APPOINT at least one director to the board.\n\nThis gives genuine input into decision-making without overall control.",
+    explanation: "Hierarchy of influence:\n• Appoint MAJORITY → CONTROL (subsidiary)\n• Appoint AT LEAST ONE → SIGNIFICANT INFLUENCE (associate)\n• Request appointment → no formal influence (can be denied)\n• Submit requests for policy → no formal influence (just a suggestion)\n\nThe key word is APPOINT — the right to decide, not just suggest.",
+    trap: "Don't confuse 'ability to request' with 'ability to appoint'. A request can be denied; the right to appoint is positive and gives real influence."
+  },
+  {
+    id: 'q17', type: 'mcq', topic: 'Theory',
+    text: "Which of the following would normally indicate that one entity has CONTROL over the activities of another?",
+    options: [
+      {label:'A',text:'Ownership of some equity shares in another entity'},
+      {label:'B',text:'Ownership of up to 20% of the equity shares of another entity'},
+      {label:'C',text:'Ownership of over 50% of the equity shares of another entity'},
+      {label:'D',text:'Ownership of between 20% and 50% of the equity shares of another entity'}
+    ],
+    answer: 'C',
+    solution: "Over 50% = majority voting rights = CONTROL = subsidiary",
+    explanation: "Owning over 50% of equity shares gives majority voting rights. Investor can:\n• Pass ordinary resolutions unilaterally\n• Appoint or remove directors\n• Direct dividend policy\n• Approve major transactions\n\nThis is the textbook indicator of control.",
+    trap: "Note 'over 50%' (not 'at least 50%'). Exactly 50% is typically NOT control on its own — voting rights would be split equally with the other holders."
+  },
+  {
+    id: 'q18', type: 'mcq', topic: 'Theory',
+    text: "Which of the following would normally indicate that one entity has CONTROL of another?",
+    options: [
+      {label:'A',text:'Ownership of the majority of the equity share capital of that other entity'},
+      {label:'B',text:'Ownership of between 20% and 50% of the equity share capital of that other entity'},
+      {label:'C',text:'Ownership of less than 20% of the equity shares of that other entity'},
+      {label:'D',text:'Ownership of some of the shares of that other entity – the precise percentage of shares held is not relevant'}
+    ],
+    answer: 'A',
+    solution: "Majority = more than 50% = CONTROL = subsidiary",
+    explanation: "'Majority' means more than 50% — the same principle as Q17, phrased differently.\n\nB describes an associate (20-50%).\nC describes a simple investment.\nD is wrong — the precise percentage IS relevant and determines accounting treatment.",
+    trap: "Option D is tempting if you think substance over form always trumps rules — but for FA-level exams, the % thresholds are firm rules. The exact percentage matters."
+  },
+  {
+    id: 'q19', type: 'mcq', topic: 'Theory',
+    text: "Which of the following would normally indicate that one entity has SIGNIFICANT INFLUENCE over the activities of another entity?",
+    options: [
+      {label:'A',text:'Ownership of some equity shares in another entity'},
+      {label:'B',text:'Ownership of up to 20% of the equity shares of another entity'},
+      {label:'C',text:'Ownership of over 50% of the equity shares of another entity'},
+      {label:'D',text:'Ownership of between 20% and 50% of the equity shares of another entity'}
+    ],
+    answer: 'D',
+    solution: "Ownership of 20% to 50% = significant influence = ASSOCIATE",
+    explanation: "Sister question to Q17. This time about significant influence (associate), not control.\n\nHierarchy by ownership %:\n• 0-20%: simple investment\n• 20-50%: associate / significant influence\n• Over 50%: subsidiary / control",
+    trap: "Read carefully — Q17 and Q19 look similar but test opposite concepts. Q17 = control = over 50%. Q19 = significant influence = 20-50%."
+  },
+  {
+    id: 'q20', type: 'mcq', topic: 'Share Exchange',
+    text: "Entity A acquired 60% of Entity B by exchanging 3 shares in A for every 2 shares in B. Entity B had 100,000 equity shares. Fair value of A share = $3.50. Fair value of B share = $2.00. Nominal value of both = $1.00.\n\nWhat was the fair value of consideration paid by A to gain control of B?",
+    options: [{label:'A',text:'$80,000'},{label:'B',text:'$90,000'},{label:'C',text:'$180,000'},{label:'D',text:'$315,000'}],
+    answer: 'D',
+    solution: "B shares acquired = 60% × 100,000 = 60,000 shares\nA shares issued = 60,000 × 3/2 = 90,000 shares\nCost of investment = 90,000 × $3.50 = $315,000",
+    explanation: "For share exchanges, always use the ACQUIRER's market price, NOT the target's market price and NOT nominal value.\n\nThe '3 for 2' ratio means 3 of A's shares per 2 of B's. Multiply B shares acquired by 3/2 to get A shares issued.\n\nWhy A's fair value? Because A gives up its own shares. Fair value of what A gave up = A shares issued × market price of A.",
+    trap: "Option C ($180,000) uses B's fair value ($2.00) instead of A's — most common error. Option B ($90,000) uses nominal value of A. Always: ACQUIRER's MARKET price for share exchange consideration."
+  },
+  {
+    id: 'q21', type: 'mcq', topic: 'Mid-year + Revenue',
+    text: "Entity X acquired 60% of Entity Z on 1 October 20X3. For the year ended 31 December 20X3, X and Z had sales revenue of $2m and $1.5m respectively. During the post-acquisition period, X made sales to Z of $0.1m.\n\nWhat is the group sales revenue for the year ended 31 December 20X3?",
+    options: [{label:'A',text:'$2.275 million'},{label:'B',text:'$2.375 million'},{label:'C',text:'$3.4 million'},{label:'D',text:'$3.5 million'}],
+    answer: 'A',
+    solution: "Z acquired 1 October → 3 months post-acquisition (Oct, Nov, Dec)\nZ's post-acq revenue = $1.5m × 3/12 = $0.375m\n\nGroup revenue = X's full revenue + Z's post-acq revenue − intercompany sale\n= $2,000,000 + $375,000 − $100,000 = $2,275,000",
+    explanation: "Two principles together:\n1. Mid-year acquisition: only POST-acq revenue of subsidiary counts\n2. Intercompany elimination: $0.1m sale from X to Z cancels\n\nX (parent) was around all year, so X's revenue is full year. Z joined 3 months before year-end, so only 3/12 of Z's revenue is post-acq.",
+    trap: "Option C ($3.4m) adds Z's FULL revenue. Option D ($3.5m) adds full Z revenue with no intercompany elimination. Always: time-apportion subsidiary's revenue for mid-year acquisitions."
+  },
+  {
+    id: 'q22', type: 'mcq', topic: 'Mid-year + Revenue',
+    text: "Entity T acquired 80% of Entity S on 1 July 20X6. Sales revenue for year ended 31 March 20X7: T $5m / S $3m. During post-acquisition period, S made sales to T of $0.5m.\n\nWhat is the group sales revenue for the year ended 31 March 20X7?",
+    options: [{label:'A',text:'$6.75 million'},{label:'B',text:'$7.25 million'},{label:'C',text:'$7.5 million'},{label:'D',text:'$8.0 million'}],
+    answer: 'A',
+    solution: "Acquired 1 July. Year-end 31 March → 9 months post-acq (Jul to Mar).\nS's post-acq revenue = $3m × 9/12 = $2.25m\n\nGroup revenue = T's full revenue + S's post-acq revenue − intercompany\n= $5m + $2.25m − $0.5m = $6.75m",
+    explanation: "Same logic as Q21 with different time window. Count months carefully:\n• Jul, Aug, Sep, Oct, Nov, Dec, Jan, Feb, Mar = 9 months\n\nIntercompany sale ($0.5m from S to T) is eliminated regardless of direction.",
+    trap: "Option D ($8m) adds full S revenue with no eliminations. Watch the time period — year-end 31 March means counting forward from July to March = 9 months."
+  },
+  {
+    id: 'q23', type: 'mcq', topic: 'Mid-year + COS + URP',
+    text: "Entity F acquired 80% of Entity G on 1 July 20X6. Cost of sales for year ended 31 March 20X7: F $10m / G $4m. During post-acquisition period, F made sales to G of $1.6m at mark-up of 25%. At year-end, one quarter of goods remained in G's inventory.\n\nWhat was the group cost of sales for the year ended 31 March 20X7?",
+    options: [{label:'A',text:'$12.480 million'},{label:'B',text:'$12.320 million'},{label:'C',text:'$11.480 million'},{label:'D',text:'$11.320 million'}],
+    answer: 'C',
+    solution: "Step 1: G's post-acq COS = $4m × 9/12 = $3m\n\nStep 2: URP\nMark-up 25% → profit fraction = 25/125 = 1/5\nProfit on sale = $1.6m × 1/5 = $320,000\nURP = $320,000 × 1/4 unsold = $80,000\n\nStep 3: Group COS = $10m + $3m − $1.6m + $0.08m = $11.48m",
+    explanation: "Three adjustments combined:\n1. Time-apportion G's COS (9/12)\n2. Eliminate intercompany sale (subtract $1.6m)\n3. ADD URP back to COS\n\nAdding URP to COS reduces gross profit, correct for unrealised inventory still held at marked-up price.",
+    trap: "Option A ($12.48m) uses full year of G's COS. Option D ($11.32m) forgets URP. Order: time-apportion first, then intercompany and URP."
+  },
+  {
+    id: 'q24', type: 'numeric', topic: 'Mid-year + COS',
+    text: "On 1 June 20X5, Hightown acquired control of Southport. For year ended 30 September 20X5, COS: Hightown $10m / Southport $6m. During post-acquisition period, Hightown sold to Southport $1.8m at mark-up 20%. At year-end, one third of goods remained in Southport's inventory.\n\nWhat was the group cost of sales for the year ended 30 September 20X5?\n\nEnter answer in $ (e.g. 10300000):",
+    answer: 10300000, tolerance: 0, answerDisplay: "$10,300,000",
+    solution: "Step 1: Southport's post-acq COS = $6m × 4/12 = $2m (Jun, Jul, Aug, Sep)\n\nStep 2: URP\nMark-up 20% → profit fraction = 20/120 = 1/6\nProfit on sale = $1.8m × 1/6 = $300,000\nURP = $300,000 × 1/3 = $100,000\n\nStep 3: Group COS = $10m + $2m − $1.8m + $0.1m = $10.3m",
+    explanation: "Same three-step approach as Q23 with shorter post-acq period (4 months).\n\nKey arithmetic:\n• 1 June to 30 Sept = 4 months\n• 20% mark-up = 1/6 of sale is profit\n• 1/3 unsold (so 2/3 already sold externally)\n\nOnly the unsold third has URP.",
+    trap: "Counting months wrong: 1 June to 30 Sept is 4 months. Confusing 20% mark-up with 20% margin (margin would give 1/5 not 1/6)."
+  },
+  {
+    id: 'q25', type: 'numeric', topic: 'Goodwill + Mid-year',
+    text: "On 1 July 20X4, Lion paid $20m to acquire 70% of Tiger. For the year ended 31 December 20X4, Tiger earned $2m profit after tax. Tiger had retained earnings of $10m at 1 January 20X4. At acquisition, Tiger's equity capital was $8m and FV of NCI was $6m.\n\nWhat was goodwill on acquisition of Tiger?\n\nEnter answer in $ (e.g. 7000000):",
+    answer: 7000000, tolerance: 0, answerDisplay: "$7,000,000",
+    solution: "Tiger's R.E at acquisition (1 July 20X4) = Opening R.E + 6 months of profit\n= $10m + ($2m × 6/12) = $11m\n\nGoodwill = Cost + FV of NCI − Net assets at acq\n= $20m + $6m − ($8m share capital + $11m R.E)\n= $26m − $19m = $7,000,000",
+    explanation: "The trick: you need Tiger's R.E at acquisition date (1 July), but only opening (1 January) and full-year profit are given.\n\nAssuming profit accrues evenly: 6 months earned by 1 July = $1m. R.E at acquisition = $10m + $1m = $11m.",
+    trap: "Common mistake: using $10m (opening R.E) directly — wrong unless acquisition was 1 January. Or using $12m (closing R.E) — wrong unless acquisition was at year-end. Always time-apportion to find mid-year R.E."
+  },
+  {
+    id: 'q26', type: 'mcq', topic: 'Goodwill + Mid-year + FV',
+    text: "Pole acquired 80% of Rod for $43m on 1 March 20X8. Rod had retained earnings of $15m at 1 July 20X7 and made profit after tax of $6m for year ended 30 June 20X8. At acquisition, Rod had equity share capital of $25m and FV of NCI was $10m. On 1 March 20X8, FV of land and buildings was $1m in excess of carrying amount.\n\nWhat was goodwill on acquisition?",
+    options: [{label:'A',text:'$4.0 million'},{label:'B',text:'$8.0 million'},{label:'C',text:'$16.0 million'},{label:'D',text:'$20.0 million'}],
+    answer: 'B',
+    solution: "Rod's accounting year: 1 Jul 20X7 to 30 Jun 20X8 (12 months).\nAcquisition 1 March 20X8 = 8 months into Rod's year.\nProfit earned by acquisition = $6m × 8/12 = $4m\nR.E at acquisition = $15m + $4m = $19m\n\nNet assets at acq = $25m + $19m + $1m FV uplift = $45m\n\nGoodwill = $43m + $10m − $45m = $8m",
+    explanation: "Multi-layer question: mid-year acquisition + FV uplift on land + NCI at FV.\n\nKey timeline: Rod's year is 1 July to 30 June (NOT calendar year). 1 March is 8 months into Rod's year.\n\nThe $1m FV uplift adds to net assets at acquisition (reducing goodwill by $1m).",
+    trap: "Easy to miscount months — Rod's year is non-calendar. Map out the timeline carefully. From 1 July 20X7 to 1 March 20X8 = 8 months."
+  },
+  {
+    id: 'q27', type: 'numeric', topic: 'Goodwill + Share Exchange',
+    text: "Plank acquired 60% of Splinter on 1 January 20X2. Plank paid $3 cash per share PLUS issued 2 new $1 shares per Splinter share acquired. Splinter had 10m $1 shares, share premium $10m, and R.E $50m at acquisition. FV of NCI was $14m. Plank's share market price was $4.50.\n\nWhat was goodwill on acquisition of Splinter?\n\nEnter answer in $ (e.g. 16000000):",
+    answer: 16000000, tolerance: 0, answerDisplay: "$16,000,000",
+    solution: "Splinter shares acquired = 60% × 10,000,000 = 6,000,000\n\nCost of investment:\nCash: 6,000,000 × $3 = $18m\nShares: 6,000,000 × 2 × $4.50 = $54m\nTotal: $72m\n\nNet assets at acq:\nShare capital: $10m\nShare premium: $10m\nR.E: $50m\nTotal: $70m\n\nGoodwill = $72m + $14m − $70m = $16m",
+    explanation: "Mixed consideration: cash PLUS share exchange. Both at fair value.\n\nKey points:\n• Use Plank's MARKET price ($4.50), not nominal ($1)\n• 2-for-1 exchange means 2 new Plank shares per 1 Splinter share\n• Don't forget share premium in net assets at acquisition",
+    trap: "Common errors: (1) Using $1 nominal instead of $4.50 market value. (2) Forgetting share premium ($10m) in net assets — this is part of equity at acquisition. (3) Wrong exchange ratio direction."
+  },
+  {
+    id: 'q28', type: 'mcq', topic: 'Goodwill + Share Exchange + FV',
+    text: "On 1 October 20X5, Luton acquired 75% of Bedford. Luton paid $4.50 per share in cash AND issued 1 new Luton share per Bedford share. Bedford had 15m $1 shares, share premium $5m, R.E $76.875m at acquisition. FV of NCI was $27m. Bedford's factory FV was $2m in excess of carrying amount. Luton's share FV was $5.00.\n\nWhat was goodwill on acquisition?",
+    options: [{label:'A',text:'$35 million'},{label:'B',text:'$37 million'},{label:'C',text:'$39 million'},{label:'D',text:'$40 million'}],
+    answer: 'A',
+    solution: "Bedford shares acquired = 75% × 15,000,000 = 11,250,000\n\nCost of investment:\nCash: 11,250,000 × $4.50 = $50.625m\nShares: 11,250,000 × 1 × $5.00 = $56.25m\nTotal: $106.875m\n\nNet assets at acq:\nShare capital: $15m\nShare premium: $5m\nR.E: $76.875m\nFV uplift on factory: $2m\nTotal: $98.875m\n\nGoodwill = $106.875m + $27m − $98.875m = $35m",
+    explanation: "Mixed consideration goodwill with three layers: cash + shares + FV adjustment.\n\nThe $2m FV uplift on factory adds to net assets, reducing goodwill by $2m vs no uplift.\n\nUse market price ($5.00) for shares — never nominal ($1).",
+    trap: "Options B, C, D correspond to specific errors: missing FV uplift, using nominal instead of market for shares, or arithmetic slips."
+  },
+  {
+    id: 'q29', type: 'numeric', topic: 'Goodwill + Share Exchange',
+    text: "On 1 January 20X6, Hyndland acquired 90% of Shawfield. Hyndland paid $3 cash per Shawfield share PLUS issued 1 new $0.50 share per Shawfield share. Shawfield had 200,000 $1 shares, share premium $100,000, R.E $590,000. FV of NCI was $75,000. FV of Shawfield's PPE was $90,000 vs carrying amount $70,000. Hyndland's $0.50 share FV was $2.00.\n\nWhat was goodwill on acquisition?\n\nEnter answer in $ (e.g. 65000):",
+    answer: 65000, tolerance: 0, answerDisplay: "$65,000",
+    solution: "Shawfield shares acquired = 90% × 200,000 = 180,000\n\nCost of investment:\nCash: 180,000 × $3 = $540,000\nShares: 180,000 × 1 × $2.00 = $360,000\nTotal: $900,000\n\nNet assets at acq:\nShare capital: $200,000\nShare premium: $100,000\nR.E: $590,000\nFV uplift on PPE: $20,000 (90 − 70)\nTotal: $910,000\n\nGoodwill = $900,000 + $75,000 − $910,000 = $65,000",
+    explanation: "The $0.50 nominal value is a red herring — always use market value ($2.00) for share exchange.\n\nFV uplift calculated as: FV − Carrying amount = $90k − $70k = $20k.",
+    trap: "Using $0.50 (nominal) instead of $2.00 (market) for share exchange. This would understate cost of investment significantly and possibly give negative goodwill (bargain purchase) — a different IFRS 3 treatment entirely."
+  },
+  {
+    id: 'q30', type: 'mcq', topic: 'NCI Profit Share',
+    text: "On 1 July 20X5, Huyton acquired 60% of Speke. For year ended 31 December 20X5: Huyton PAT $600,000; Speke PAT $400,000. Huyton sold goods to Speke including profit of $20,000. At year-end, one quarter remained in Speke's inventory.\n\nWhat was the NCI share of group profit after tax?",
+    options: [{label:'A',text:'$80,000'},{label:'B',text:'$160,000'},{label:'C',text:'$78,000'},{label:'D',text:'$155,000'}],
+    answer: 'A',
+    solution: "Speke acquired 1 July → 6 months post-acq (Jul-Dec)\nSpeke's post-acq PAT = $400,000 × 6/12 = $200,000\n\nURP: Huyton (PARENT) was seller → URP hits parent's R.E only, NOT NCI.\n\nNCI share = 40% × $200,000 = $80,000",
+    explanation: "Two principles:\n1. Mid-year acquisition: only post-acq portion of subsidiary's PAT counts (6/12)\n2. URP direction rule: when PARENT is seller, NCI is unaffected\n\nURP detail is a distractor — irrelevant to NCI here because Huyton (parent) was the seller.",
+    trap: "Don't deduct URP from Speke's PAT before applying NCI% — that only applies when SUBSIDIARY is seller. When parent sells, NCI completely unaffected by URP."
+  },
+  {
+    id: 'q31', type: 'mcq', topic: 'Goodwill + Mid-year',
+    text: "Honey acquired 75% of Bee on 1 April 20X3, paying $2 per equity share acquired. FV of NCI at 1 April 20X3 was $300. Bee's SOFP at 30 September 20X3: Share capital ($1 each) $1,000; R.E $710. Bee's PAT for year was $250. Profit accrued evenly.\n\nWhat was goodwill on acquisition at 1 April 20X3?",
+    options: [{label:'A',text:'$715'},{label:'B',text:'$90'},{label:'C',text:'$517'},{label:'D',text:'$215'}],
+    answer: 'D',
+    solution: "Bee's year-end 30 Sept. Acquisition 1 April = 6 months before year-end.\nProfit from 1 April to 30 Sept = $250 × 6/12 = $125\n\nBee's R.E at acquisition = Closing R.E − Post-acq profit\n= $710 − $125 = $585\n\nCost = 75% × 1,000 × $2 = $1,500\n\nGoodwill = $1,500 + $300 − ($1,000 + $585) = $215",
+    explanation: "Working BACKWARDS to find R.E at acquisition. Only closing R.E ($710) and full-year profit ($250) are given.\n\nApproach: Closing R.E minus post-acq profit portion.\nPost-acq = $250 × 6/12 = $125\nR.E at acq = $710 − $125 = $585",
+    trap: "Using $710 (closing R.E) directly without backing out post-acq would understate goodwill. Also: using full $250 profit without time-apportioning. The trick is recognising you need R.E AT acquisition, not at year-end."
+  },
+  {
+    id: 'q32', type: 'numeric', topic: 'Revenue + Mid-year',
+    text: "Panther acquired 80% of Seal on 31 August 20X2. Year ended 31 December 20X2: Revenue Panther $100,000; Seal $62,000. COS: Panther $25,000; Seal $16,000. During October 20X2, sales of $6,000 were made by Panther to Seal. None remained in inventory at year-end.\n\nWhat is the consolidated revenue for Panther Group?\n\nEnter answer in $ (e.g. 114667):",
+    answer: 114667, tolerance: 1, answerDisplay: "$114,667",
+    solution: "Seal acquired 31 August → 4 months post-acq (Sep, Oct, Nov, Dec)\nSeal's post-acq revenue = $62,000 × 4/12 = $20,667\n\nConsolidated revenue = Panther's full + Seal's post-acq − intercompany\n= $100,000 + $20,667 − $6,000 = $114,667",
+    explanation: "Two adjustments:\n1. Time-apportion Seal's revenue\n2. Eliminate intercompany sale\n\nThe 'no inventory remaining' detail means NO URP, but the intercompany sale itself ($6,000) still gets eliminated from revenue.",
+    trap: "Don't forget to eliminate the intercompany sale even when there's no URP. Even with all goods sold externally, the original sale between group companies still cancels."
+  },
+  {
+    id: 'q33', type: 'numeric', topic: 'Gross Profit + Mid-year',
+    text: "Tulip acquired 70% of Daffodil on 1 March 20X2. Year ended 31 August 20X2:\nRevenue: Tulip $61,000 / Daffodil $23,000\nCOS: Tulip $(42,700) / Daffodil $(13,800)\nGross profit: Tulip $18,300 / Daffodil $9,200\n\nNo intercompany trading. What should be the consolidated gross profit?\n\nEnter answer in $ (e.g. 22900):",
+    answer: 22900, tolerance: 0, answerDisplay: "$22,900",
+    solution: "Daffodil acquired 1 March → 6 months post-acq (Mar to Aug)\nDaffodil's post-acq gross profit = $9,200 × 6/12 = $4,600\n\nConsolidated gross profit = Tulip's full GP + Daffodil's post-acq GP\n= $18,300 + $4,600 = $22,900",
+    explanation: "When there's no intercompany trade, the only adjustment is time-apportionment for mid-year acquisition.\n\nShortcut: when no other adjustments, time-apportion gross profit directly instead of revenue minus COS separately.",
+    trap: "Don't add Daffodil's FULL gross profit ($9,200) — that would give $27,500 which incorrectly includes pre-acquisition profit. Always time-apportion subsidiary results for mid-year acquisitions."
+  },
+  {
+    id: 'q34', type: 'numeric', topic: 'Goodwill + Share Exchange',
+    text: "Venus acquired 75% of Mercury's 100,000 $1 equity shares on 1 November 20X4. Consideration: $2 cash per share PLUS 1 Venus share per Mercury share acquired. Venus shares: nominal $1, fair value $1.75. FV of NCI was $82,000. FV of net assets acquired was $215,500.\n\nWhat is goodwill on acquisition?\n\nEnter answer in $ (e.g. 147750):",
+    answer: 147750, tolerance: 0, answerDisplay: "$147,750",
+    solution: "Mercury shares acquired = 75% × 100,000 = 75,000\n\nCost of investment:\nCash: 75,000 × $2 = $150,000\nShares: 75,000 × 1 × $1.75 = $131,250\nTotal: $281,250\n\nGoodwill = $281,250 + $82,000 − $215,500 = $147,750",
+    explanation: "Net assets at acquisition is given directly ($215,500) — saving you the build-up from share capital + R.E + FV adjustments.\n\nFocus on consideration: cash + market value of shares. Always $1.75 (fair value), never $1 (nominal).",
+    trap: "Using $1 nominal instead of $1.75 fair value would give cost $225,000 and goodwill $91,500 — WRONG. Always use FAIR VALUE for share exchange consideration."
+  },
+  {
+    id: 'q35', type: 'mcq', topic: 'Associates',
+    text: "Which of the following investments of Coffee should be equity accounted in the consolidated financial statements?\n\ni. 40% of the non-voting preference share capital in Tea Co\nii. 18% of the equity share capital in Café Co with two of the five directors of Coffee Co on the board of Café Co\niii. 50% of the equity share capital of Choc Co, with five of the seven directors of Coffee Co on the board of Choc Co",
+    options: [{label:'A',text:'i and ii'},{label:'B',text:'ii only'},{label:'C',text:'i and iii'},{label:'D',text:'ii and iii'}],
+    answer: 'B',
+    solution: "Only (ii) qualifies as an associate.\n\n(i) Non-voting preference shares give NO voting rights → no influence → not associate, not subsidiary.\n\n(ii) 18% equity (below 20% threshold) BUT 2 of 5 directors (40% board representation) → significant influence in substance → associate.\n\n(iii) 50% equity + majority of board (5/7) → CONTROL → subsidiary (full consolidation, NOT equity method).",
+    explanation: "Substance over form. The 20-50% threshold is a starting indicator, but the actual test is SIGNIFICANT INFLUENCE, demonstrated by:\n• Board representation\n• Participation in policy-making\n• Material transactions\n• Technical information sharing\n\nLikewise, control isn't just about 50% — board majority can confer control even at 50% equity.",
+    trap: "Don't apply % thresholds rigidly. Non-voting shares = no influence regardless of %. Board control trumps simple % rules. Substance over form is core to IAS 28 and IFRS 10."
+  },
+  {
+    id: 'q36', type: 'mcq', topic: 'Associate Theory',
+    text: "Consider the following two statements about accounting for associates:\n\n1. Equity accounting will always be used when an investing entity holds between 20%–50% of the equity shares in another entity.\n\n2. Dividends received from an investment in associate will be presented as investment income in the consolidated financial statements.\n\nWhich is TRUE?",
+    options: [
+      {label:'A',text:'Both statements are true'},
+      {label:'B',text:'Only statement 1 is true'},
+      {label:'C',text:'Only statement 2 is true'},
+      {label:'D',text:'Both statements are false'}
+    ],
+    answer: 'D',
+    solution: "Both statements are FALSE.\n\nStatement 1: NOT always. The 20-50% range is a PRESUMPTION of significant influence, but can be rebutted (e.g. if investor cannot exercise influence in practice). Also, sometimes <20% can be an associate if significant influence is demonstrated through board representation.\n\nStatement 2: NOT correct. Dividends from an associate are NOT shown as investment income. Under equity method, you've already taken your share of the associate's profit. Dividends reduce the investment carrying value (Dr Cash, Cr Investment in associate).",
+    explanation: "Two common misconceptions:\n\n1. The 20-50% rule is a PRESUMPTION, not automatic. IAS 28 allows rebuttal in either direction.\n\n2. Different dividend treatments:\n• Simple investment (IFRS 9): dividend → investment income in P&L\n• Associate (equity method): dividend → reduce investment carrying value (no P&L impact)\n\nWhy? Because you've already recognised your share of profits via 'share of profit of associate'.",
+    trap: "Statement 1 trips up students who think 20-50% is black-and-white. Statement 2 trips up those who treat all dividends the same way. Different rules apply for different investment types."
+  }
+];
+
+const STORAGE_KEY = 'consolidation_mcq_state_v1';
+let state = { screen: 'start', currentIndex: 0, answers: {}, openResultId: null };
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) state = { ...state, ...JSON.parse(saved) };
+  } catch(e) {}
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function resetTest() {
+  if (!confirm('This will erase your saved progress and answers. Start over?')) return;
+  state = { screen: 'start', currentIndex: 0, answers: {}, openResultId: null };
+  saveState();
+  render();
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (state.screen === 'start') renderStart(app);
+  else if (state.screen === 'question') renderQuestion(app);
+  else if (state.screen === 'results') renderResults(app);
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function formatQuestionText(text) {
+  const blocks = text.split(/\n\n+/);
+  return blocks.map(block => {
+    const isData = (block.includes('\n') && (/\s{2,}/.test(block) || (block.match(/\$/g) || []).length >= 3 || /^\s*[\$\d]/m.test(block) || /:\s*\$/.test(block)));
+    if (isData) return `<div class="q-data">${escapeHTML(block)}</div>`;
+    return `<p style="margin: 0 0 12px;">${escapeHTML(block).replace(/\n/g, '<br>')}</p>`;
+  }).join('');
+}
+
+function renderStart(app) {
+  const answeredCount = Object.keys(state.answers).length;
+  const hasProgress = answeredCount > 0;
+  app.innerHTML = `
+    <header class="banner">
+      <h1>Consolidation MCQ Test</h1>
+      <div class="sub">ACCA Financial Accounting · ${QUESTIONS.length} questions · No timer · Progress saves automatically</div>
+    </header>
+    <div class="card start-screen">
+      <h2>${hasProgress ? 'Resume Test' : 'Start Test'}</h2>
+      <p>
+        ${hasProgress
+          ? `You've answered <strong>${answeredCount} of ${QUESTIONS.length}</strong> questions. Continue where you left off?`
+          : `${QUESTIONS.length} consolidation questions covering goodwill, NCI, URP, intercompany trading, mid-year acquisitions, share exchanges, and associates.`
+        }
+      </p>
+      <p style="font-size:14px; color: var(--text-muted);">
+        Click an answer to select. Click "Next" to move on. No instant feedback — full results and explanations appear at the end.<br>
+        Progress saves automatically. You can close and reopen anytime.
+      </p>
+      <div style="margin-top: 30px;">
+        <button class="nav-btn primary" onclick="startTest()">${hasProgress ? 'Resume Test' : 'Start Test'}</button>
+        ${hasProgress ? '<button class="nav-btn danger" onclick="resetTest()" style="margin-left:10px;">Start Over</button>' : ''}
+      </div>
+    </div>
+  `;
+}
+
+function startTest() {
+  let firstUnanswered = 0;
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    if (state.answers[QUESTIONS[i].id] === undefined) { firstUnanswered = i; break; }
+    if (i === QUESTIONS.length - 1) firstUnanswered = i;
+  }
+  state.currentIndex = firstUnanswered;
+  state.screen = 'question';
+  saveState();
+  render();
+}
+
+function renderQuestion(app) {
+  const q = QUESTIONS[state.currentIndex];
+  const progress = ((state.currentIndex + 1) / QUESTIONS.length) * 100;
+  const currentAnswer = state.answers[q.id];
+
+  let optionsHTML = '';
+  if (q.type === 'mcq') {
+    optionsHTML = `<div class="options">${q.options.map(opt => `
+      <button class="option ${currentAnswer === opt.label ? 'selected' : ''}" onclick="selectAnswer('${opt.label}')">
+        <span class="option-letter">${opt.label}</span>
+        <span class="option-text">${escapeHTML(opt.text)}</span>
+      </button>`).join('')}</div>`;
+  } else if (q.type === 'numeric') {
+    const val = currentAnswer !== undefined ? currentAnswer : '';
+    optionsHTML = `<div class="numeric-input-wrap">
+      <label>Answer ($):</label>
+      <input type="number" class="numeric-input" id="numeric-${q.id}" value="${val}" oninput="setNumericAnswer(this.value)" placeholder="Enter number" autocomplete="off">
+    </div>`;
+  }
+
+  const isLast = state.currentIndex === QUESTIONS.length - 1;
+  app.innerHTML = `
+    <header class="banner">
+      <h1>Consolidation MCQ Test</h1>
+      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+      <div class="progress-text">
+        <span>Question ${state.currentIndex + 1} of ${QUESTIONS.length}</span>
+        <span>${Object.keys(state.answers).length} answered</span>
+      </div>
+    </header>
+    <div class="card">
+      <div class="q-number">
+        <span class="tag ${q.type === 'numeric' ? 'numeric' : 'mcq'}">${q.type === 'numeric' ? 'Numeric' : 'MCQ'}</span>
+        ${q.topic} · Q${state.currentIndex + 1}
+      </div>
+      <div class="q-text">${formatQuestionText(q.text)}</div>
+      ${optionsHTML}
+      <div class="actions">
+        <button class="nav-btn" onclick="prevQ()" ${state.currentIndex === 0 ? 'disabled' : ''}>← Previous</button>
+        ${isLast ? `<button class="nav-btn primary" onclick="submitTest()">Submit Test →</button>` : `<button class="nav-btn primary" onclick="nextQ()">Next →</button>`}
+      </div>
+    </div>
+    <div style="text-align:center; margin-top: 20px;">
+      <button class="nav-btn" onclick="goHome()" style="font-size:13px; padding: 8px 16px;">Save & Exit</button>
+    </div>
+  `;
+}
+
+function selectAnswer(label) {
+  state.answers[QUESTIONS[state.currentIndex].id] = label;
+  saveState();
+  render();
+}
+function setNumericAnswer(val) {
+  const q = QUESTIONS[state.currentIndex];
+  if (val === '' || val === null) delete state.answers[q.id];
+  else state.answers[q.id] = parseFloat(val);
+  saveState();
+}
+function nextQ() {
+  if (state.currentIndex < QUESTIONS.length - 1) { state.currentIndex++; saveState(); render(); }
+}
+function prevQ() {
+  if (state.currentIndex > 0) { state.currentIndex--; saveState(); render(); }
+}
+function goHome() { state.screen = 'start'; saveState(); render(); }
+
+function submitTest() {
+  const answered = Object.keys(state.answers).length;
+  if (answered < QUESTIONS.length) {
+    const skipped = QUESTIONS.length - answered;
+    if (!confirm(`You have ${skipped} unanswered question${skipped > 1 ? 's' : ''}. Submit anyway?`)) return;
+  }
+  state.screen = 'results';
+  saveState();
+  render();
+}
+
+function isCorrect(q, userAnswer) {
+  if (userAnswer === undefined) return false;
+  if (q.type === 'mcq') return userAnswer === q.answer;
+  if (q.type === 'numeric') {
+    const tolerance = q.tolerance || 0;
+    return Math.abs(userAnswer - q.answer) <= tolerance;
+  }
+  return false;
+}
+
+function renderResults(app) {
+  let correctCount = 0, wrongCount = 0, skippedCount = 0;
+  QUESTIONS.forEach(q => {
+    const ua = state.answers[q.id];
+    if (ua === undefined) skippedCount++;
+    else if (isCorrect(q, ua)) correctCount++;
+    else wrongCount++;
+  });
+  const pct = Math.round((correctCount / QUESTIONS.length) * 100);
+
+  const resultsHTML = QUESTIONS.map((q, i) => {
+    const ua = state.answers[q.id];
+    const correct = isCorrect(q, ua);
+    const skipped = ua === undefined;
+    const mark = skipped ? '−' : (correct ? '✓' : '✗');
+    const markClass = skipped ? 'skipped' : (correct ? 'correct' : 'wrong');
+    const correctAnswerLabel = q.type === 'mcq'
+      ? `${q.answer} — ${q.options.find(o => o.label === q.answer).text}`
+      : q.answerDisplay;
+    const summary = skipped ? 'Not answered'
+      : (q.type === 'mcq'
+        ? `Your answer: ${ua}${correct ? ' ✓' : ` · Correct: ${q.answer}`}`
+        : `Your answer: ${ua.toLocaleString()}${correct ? ' ✓' : ` · Correct: ${q.answerDisplay}`}`);
+    const isOpen = state.openResultId === q.id;
+
+    return `<div class="result-item ${isOpen ? 'open' : ''}" id="result-${q.id}">
+      <div class="result-header" onclick="toggleResult('${q.id}')">
+        <div class="result-mark ${markClass}">${mark}</div>
+        <div class="result-info">
+          <div class="result-title">Q${i + 1}: ${q.topic}</div>
+          <div class="result-summary">${escapeHTML(summary)}</div>
+        </div>
+        <div class="result-chevron">▶</div>
+      </div>
+      <div class="result-body">
+        <div style="font-size:14.5px;">${formatQuestionText(q.text)}</div>
+        ${!skipped ? `<div class="user-answer-shown"><strong>Your answer:</strong> ${q.type === 'mcq' ? ua : ua.toLocaleString()}${correct ? ' ✓ Correct' : ' ✗ Incorrect'}</div>` : ''}
+        <div class="user-answer-shown"><strong>Correct answer:</strong> ${escapeHTML(correctAnswerLabel)}</div>
+        <div class="layer solution">
+          <h4>Solution</h4>
+          <pre>${escapeHTML(q.solution)}</pre>
+        </div>
+        <div class="layer explanation">
+          <h4>Explanation</h4>
+          ${q.explanation.split('\n\n').map(p => `<p>${escapeHTML(p).replace(/\n/g, '<br>')}</p>`).join('')}
+        </div>
+        <div class="layer trap">
+          <h4>Trap / Top Tip</h4>
+          ${q.trap.split('\n\n').map(p => `<p>${escapeHTML(p).replace(/\n/g, '<br>')}</p>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  app.innerHTML = `
+    <header class="banner">
+      <h1>Results</h1>
+      <div class="sub">${correctCount} correct · ${wrongCount} wrong · ${skippedCount} skipped</div>
+    </header>
+    <div class="card results-screen">
+      <h2>Test Complete</h2>
+      <div class="score-display">
+        <div class="big">${correctCount}/${QUESTIONS.length}</div>
+        <div class="pct">${pct}% correct</div>
+      </div>
+      <p class="score-line">Click any question below to see the full solution, deep explanation, and traps to watch for.</p>
+      <div class="results-actions">
+        <button class="nav-btn" onclick="reviewMode()">← Back to Questions</button>
+        <button class="nav-btn danger" onclick="resetTest()">Start Over</button>
+      </div>
+    </div>
+    <div class="results-list">${resultsHTML}</div>
+  `;
+}
+
+function toggleResult(id) {
+  state.openResultId = state.openResultId === id ? null : id;
+  saveState();
+  render();
+  setTimeout(() => {
+    const el = document.getElementById(`result-${id}`);
+    if (el && state.openResultId === id) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+function reviewMode() {
+  state.screen = 'question';
+  state.currentIndex = 0;
+  saveState();
+  render();
+}
+
+loadState();
+render();
+</script>
+</body>
+</html>
