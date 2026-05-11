@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCA FA — Master Dashboard</title>
+<style>
+:root {
+  --bg: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-alt: #F4F2EC;
+  --ink: #1A1A1A;
+  --ink-2: #4A4944;
+  --ink-3: #7A7972;
+  --ink-4: #A8A79F;
+  --line: rgba(0,0,0,0.08);
+  --line-strong: rgba(0,0,0,0.15);
+  --accent: #1B3A5C;
+  --accent-soft: #E4EAF2;
+  --positive: #2D5A3F;
+  --positive-soft: #E6EFE9;
+  --negative: #8B2E2E;
+  --warn: #7A5A1F;
+  --warn-soft: #F2EAD6;
+  --kaplan: #8B2E2E;
+  --bpp: #2D5A3F;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "tnum" 1;
+}
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 28px 60px;
+}
+
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 18px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+.masthead h1 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin: 0 0 2px;
+}
+.masthead .subtitle {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.2px;
+}
+.masthead .meta {
+  text-align: right;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.masthead .meta .countdown {
+  display: block;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  text-transform: none;
+  margin-top: 2px;
+}
+.masthead .meta .countdown .unit {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-weight: 500;
+  margin-left: 4px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.kpi {
+  background: var(--surface);
+  padding: 16px 18px;
+}
+.kpi .label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+.kpi .value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+.kpi .value .unit {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-left: 4px;
+  letter-spacing: 0;
+}
+.kpi .delta {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 22px 24px 18px;
+  margin-bottom: 24px;
+}
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.2px;
+  margin: 0 0 3px;
+}
+.chart-subtitle {
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+.chart-legend {
+  display: flex;
+  gap: 18px;
+  font-size: 11.5px;
+  color: var(--ink-2);
+  align-items: center;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-swatch {
+  width: 16px;
+  height: 2.5px;
+  background: var(--accent);
+}
+.legend-swatch.target {
+  background: transparent;
+  border-top: 1.5px dashed var(--warn);
+}
+
+#chart {
+  width: 100%;
+  height: 260px;
+  display: block;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+@media (max-width: 820px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 20px 22px;
+}
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tier-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.tier-row:last-child { border-bottom: none; }
+.tier-row .name { flex: 1; color: var(--ink-2); }
+.tier-row .name strong { color: var(--ink); font-weight: 600; }
+.tier-row .bar-wrap {
+  width: 100px;
+  height: 6px;
+  background: var(--surface-alt);
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.tier-row .bar-fill {
+  height: 100%;
+  background: var(--accent);
+}
+.tier-row .bar-fill.critical { background: var(--negative); }
+.tier-row .bar-fill.important { background: var(--warn); }
+.tier-row .bar-fill.standard { background: var(--ink-3); }
+.tier-row .pct {
+  font-size: 12px;
+  color: var(--ink-2);
+  width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.chapters-section { margin-top: 30px; }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.section-head h2 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin: 0;
+}
+.section-head .count {
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+.chapter-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-bottom: none;
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s ease;
+}
+.chapter-row:first-of-type { border-radius: 6px 6px 0 0; }
+.chapter-row:last-of-type { border-radius: 0 0 6px 6px; border-bottom: 1px solid var(--line); }
+.chapter-row:hover:not(.disabled) { background: var(--surface-alt); }
+.chapter-row.disabled { color: var(--ink-4); cursor: default; pointer-events: none; }
+
+.tier-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--ink-3);
+  width: 28px;
+  text-align: center;
+  border-right: 1px solid var(--line);
+  padding-right: 12px;
+}
+.tier-tag.critical { color: var(--negative); }
+.tier-tag.important { color: var(--warn); }
+.tier-tag.standard { color: var(--ink-3); }
+
+.chapter-info .title {
+  font-size: 14px;
+  font-weight: 500;
+}
+.chapter-info .desc {
+  font-size: 11.5px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+
+.publisher-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  background: var(--surface-alt);
+  color: var(--ink-3);
+  border: 1px solid var(--line);
+}
+.publisher-tag.kaplan { background: rgba(139,46,46,0.08); color: var(--kaplan); border-color: rgba(139,46,46,0.15); }
+.publisher-tag.bpp { background: rgba(45,90,63,0.08); color: var(--bpp); border-color: rgba(45,90,63,0.15); }
+
+.chapter-progress {
+  text-align: right;
+  font-size: 12px;
+  min-width: 100px;
+}
+.chapter-progress .nums { color: var(--ink); font-weight: 500; }
+.chapter-progress .pct { color: var(--ink-3); font-size: 11px; margin-top: 1px; }
+.chapter-progress .status-coming { font-style: italic; color: var(--ink-4); font-size: 11px; }
+.chapter-progress .status-complete { color: var(--positive); font-weight: 600; font-size: 11px; }
+
+.row-arrow { color: var(--ink-4); font-size: 16px; width: 12px; text-align: center; }
+.disabled .row-arrow { visibility: hidden; }
+
+/* ===== Toolbar buttons ===== */
+.toolbar-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+.toolbar-btn {
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: var(--ink-2);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.toolbar-btn:hover {
+  background: var(--surface-alt);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+.toolbar-btn .icon {
+  font-size: 13px;
+  opacity: 0.7;
+}
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.toast.show { opacity: 1; }
+
+.dashboard-footer {
+  margin-top: 36px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 11.5px;
+  color: var(--ink-3);
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 720px) {
+  .app { padding: 20px 16px 40px; }
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+  .kpi .value { font-size: 20px; }
+  .masthead { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .masthead .meta { text-align: left; }
+  .chart-header { flex-direction: column; gap: 10px; }
+  .chart-legend { flex-wrap: wrap; gap: 12px; }
+  #chart { height: 220px; }
+  .chapter-row { grid-template-columns: auto 1fr auto; padding: 12px 14px; gap: 10px; }
+  .chapter-row .publisher-tag { display: none; }
+  .chapter-row .row-arrow { display: none; }
+  .chapter-info .title { font-size: 13px; }
+  .chapter-info .desc { display: none; }
+  .dashboard-footer { flex-direction: column; gap: 6px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="masthead">
+  <div>
+    <h1>ACCA Financial Accounting</h1>
+    <div class="subtitle">Master Dashboard · Practice Tests · Performance Tracking</div>
+  </div>
+  <div class="meta">
+    <div>Exam · 24 May 2026 · Brighton</div>
+    <div class="countdown" id="countdown">— <span class="unit">days</span></div>
+    <div class="toolbar-buttons">
+      <button class="toolbar-btn" onclick="exportData()" title="Download a backup of all your progress"><span class="icon">↓</span> Backup</button>
+      <button class="toolbar-btn" onclick="document.getElementById('import-input').click()" title="Restore from a backup file"><span class="icon">↑</span> Import</button>
+      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(this)">
+    </div>
+  </div>
+</header>
+
+<div class="toast" id="toast"></div>
+
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="label">Questions Attempted</div>
+    <div class="value" id="kpi-attempted">0<span class="unit">/ 91</span></div>
+    <div class="delta" id="kpi-attempted-delta">No activity yet</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Coverage</div>
+    <div class="value" id="kpi-coverage">0<span class="unit">%</span></div>
+    <div class="delta" id="kpi-coverage-delta">Of available questions</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Tests Completed</div>
+    <div class="value" id="kpi-completed">0<span class="unit">/ 2</span></div>
+    <div class="delta" id="kpi-completed-delta">Build & take more</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Current Streak</div>
+    <div class="value" id="kpi-streak">0<span class="unit">days</span></div>
+    <div class="delta" id="kpi-streak-delta">Practise today</div>
+  </div>
+</div>
+
+<div class="chart-card">
+  <div class="chart-header">
+    <div>
+      <div class="chart-title">Cumulative Questions Practised</div>
+      <div class="chart-subtitle">Daily progression to exam day · Target line shows pace required</div>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><span class="legend-swatch"></span><span>Actual</span></div>
+      <div class="legend-item"><span class="legend-swatch target"></span><span>Required pace</span></div>
+    </div>
+  </div>
+  <svg id="chart" viewBox="0 0 800 260" preserveAspectRatio="none"></svg>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">Progress by Priority Tier</div>
+    <div id="tier-breakdown"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Last 14 Days · Activity</div>
+    <div id="activity-grid"></div>
+  </div>
+</div>
+
+<div class="chapters-section">
+  <div class="section-head">
+    <h2>Tier 1 · Critical Chapters</h2>
+    <span class="count" id="critical-count">— chapters</span>
+  </div>
+  <div id="critical-list"></div>
+</div>
+
+<div class="chapters-section">
+  <div class="section-head">
+    <h2>Tier 2 · Important Chapters</h2>
+    <span class="count" id="important-count">— chapters</span>
+  </div>
+  <div id="important-list"></div>
+</div>
+
+<div class="chapters-section">
+  <div class="section-head">
+    <h2>Tier 3 · Standard Chapters</h2>
+    <span class="count" id="standard-count">— chapters</span>
+  </div>
+  <div id="standard-list"></div>
+</div>
+
+<div class="dashboard-footer">
+  <span class="left">Progress stored locally · Refreshes when you return to this page</span>
+  <span class="right" id="footer-updated">—</span>
+</div>
+
+</div>
+
+<script>
+const EXAM_DATE = new Date('2026-05-24T00:00:00');
+const ACTIVITY_STORAGE_KEY = 'fa_dashboard_activity_v1';
+
+const CHAPTERS = [
+  { title: 'Consolidation', desc: 'Goodwill, NCI, intercompany, URP', tier: 'critical',
+    tests: [
+      { name: '36-question MCQ test', file: 'kaplan-consolidation-mcqs.html', publisher: 'kaplan', storageKey: 'consolidation_mcq_state_v1', total: 36 },
+      { name: '55 multi-task sub-tasks', file: 'kaplan-consolidation-mtqs.html', publisher: 'kaplan', storageKey: 'consolidation_mtq_state_v1', total: 55 }
+    ]
+  },
+  { title: 'Limited Company Final Accounts', desc: 'SOFP, P&L, SOCIE', tier: 'critical',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Statement of Cash Flows', desc: 'Direct & indirect method', tier: 'critical',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Accruals and Prepayments', desc: 'Matching principle', tier: 'critical',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Depreciation', desc: 'Methods, disposals, revaluation', tier: 'critical',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Inventories (IAS 2)', desc: 'Cost vs NRV, FIFO/AVCO', tier: 'important',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Receivables & Irrecoverable Debts', desc: 'Allowance accounting', tier: 'important',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Bank Reconciliation', desc: 'Timing differences, errors', tier: 'important',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Control Account Reconciliation', desc: 'Receivables & payables ledgers', tier: 'important',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Suspense Accounts & Errors', desc: 'Error correction', tier: 'important',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Double Entry Bookkeeping', desc: 'Debits, credits, ledgers', tier: 'standard',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Trial Balance', desc: 'Preparation & errors', tier: 'standard',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Sales Tax / VAT', desc: 'Input & output VAT', tier: 'standard',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Capital & Revenue Expenditure', desc: 'Classification', tier: 'standard',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Ratio Analysis', desc: 'Profitability, liquidity, gearing', tier: 'standard',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] },
+  { title: 'Conceptual Framework', desc: 'IASB framework, qualitative characteristics', tier: 'standard',
+    tests: [{ name: 'Practice tests', publisher: 'kaplan', comingSoon: true }] }
+];
+
+function getTestState(storageKey) {
+  if (!storageKey) return null;
+  try {
+    const saved = localStorage.getItem(storageKey);
+    if (!saved) return null;
+    return JSON.parse(saved);
+  } catch(e) { return null; }
+}
+
+function getTestStats(test) {
+  if (test.comingSoon) return null;
+  const state = getTestState(test.storageKey);
+  if (!state) return { answered: 0, total: test.total, submitted: false };
+  const answered = state.answers ? Object.keys(state.answers).length : 0;
+  const submitted = state.screen === 'results';
+  return { answered, total: test.total, submitted };
+}
+
+function trackActivity(totalAnsweredNow) {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    let log = JSON.parse(localStorage.getItem(ACTIVITY_STORAGE_KEY) || '{}');
+    log[today] = totalAnsweredNow;
+    const cutoff = new Date(Date.now() - 90*24*60*60*1000).toISOString().slice(0,10);
+    Object.keys(log).forEach(k => { if (k < cutoff) delete log[k]; });
+    localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(log));
+    return log;
+  } catch(e) { return {}; }
+}
+
+function calculateStreak(log) {
+  const dates = Object.keys(log).sort().reverse();
+  if (dates.length === 0) return 0;
+  const today = new Date().toISOString().slice(0,10);
+  const yesterday = new Date(Date.now() - 24*60*60*1000).toISOString().slice(0,10);
+  if (dates[0] !== today && dates[0] !== yesterday) return 0;
+  let streak = 0;
+  let cursor = new Date(dates[0]);
+  let lastCount = -1;
+  for (const dateStr of dates) {
+    const expectedStr = cursor.toISOString().slice(0,10);
+    if (dateStr !== expectedStr) break;
+    if (lastCount === -1 || log[dateStr] > lastCount) {
+      streak++;
+      lastCount = log[dateStr];
+    } else { break; }
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
+
+function render() {
+  let totalQuestions = 0;
+  let totalAnswered = 0;
+  let testsLive = 0;
+  let testsCompleted = 0;
+  const tierStats = {
+    critical: { answered: 0, total: 0 },
+    important: { answered: 0, total: 0 },
+    standard: { answered: 0, total: 0 }
+  };
+
+  CHAPTERS.forEach(ch => {
+    ch.tests.forEach(test => {
+      if (test.comingSoon) return;
+      testsLive++;
+      totalQuestions += test.total;
+      tierStats[ch.tier].total += test.total;
+      const stats = getTestStats(test);
+      if (stats) {
+        totalAnswered += stats.answered;
+        tierStats[ch.tier].answered += stats.answered;
+        if (stats.submitted) testsCompleted++;
+      }
+    });
+  });
+
+  const activityLog = trackActivity(totalAnswered);
+  const streak = calculateStreak(activityLog);
+
+  document.getElementById('kpi-attempted').innerHTML = `${totalAnswered}<span class="unit">/ ${totalQuestions}</span>`;
+  const coverage = totalQuestions > 0 ? Math.round((totalAnswered/totalQuestions)*100) : 0;
+  document.getElementById('kpi-attempted-delta').textContent = totalAnswered > 0 ? `${coverage}% coverage` : 'No activity yet';
+
+  document.getElementById('kpi-coverage').innerHTML = `${coverage}<span class="unit">%</span>`;
+  document.getElementById('kpi-coverage-delta').textContent = coverage >= 70 ? 'Strong coverage' : coverage >= 40 ? 'Building coverage' : 'Of available questions';
+
+  document.getElementById('kpi-completed').innerHTML = `${testsCompleted}<span class="unit">/ ${testsLive}</span>`;
+  document.getElementById('kpi-completed-delta').textContent = testsCompleted > 0 ? 'Tests submitted' : 'No tests submitted yet';
+
+  document.getElementById('kpi-streak').innerHTML = `${streak}<span class="unit">${streak === 1 ? 'day' : 'days'}</span>`;
+  document.getElementById('kpi-streak-delta').textContent = streak > 0 ? 'Keep going' : 'Practise today';
+
+  const today = new Date();
+  const diffDays = Math.ceil((EXAM_DATE - today) / (1000 * 60 * 60 * 24));
+  const countdownEl = document.getElementById('countdown');
+  if (diffDays > 0) countdownEl.innerHTML = `${diffDays}<span class="unit">days</span>`;
+  else if (diffDays === 0) countdownEl.innerHTML = `Today<span class="unit"></span>`;
+  else countdownEl.innerHTML = `Passed<span class="unit"></span>`;
+
+  const tierBreakdown = document.getElementById('tier-breakdown');
+  tierBreakdown.innerHTML = ['critical', 'important', 'standard'].map(tier => {
+    const t = tierStats[tier];
+    const pct = t.total > 0 ? Math.round((t.answered/t.total)*100) : 0;
+    const label = { critical: 'Tier 1 Critical', important: 'Tier 2 Important', standard: 'Tier 3 Standard' }[tier];
+    return `
+      <div class="tier-row">
+        <div class="name"><strong>${label}</strong></div>
+        <div class="bar-wrap"><div class="bar-fill ${tier}" style="width:${pct}%"></div></div>
+        <div class="pct">${t.answered} / ${t.total}</div>
+      </div>
+    `;
+  }).join('');
+
+  const activityGrid = document.getElementById('activity-grid');
+  const days = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(Date.now() - i*24*60*60*1000);
+    const key = d.toISOString().slice(0,10);
+    const count = activityLog[key] || 0;
+    const prevD = new Date(d.getTime() - 24*60*60*1000);
+    const prevKey = prevD.toISOString().slice(0,10);
+    const prevCount = activityLog[prevKey] || 0;
+    const increment = Math.max(0, count - prevCount);
+    days.push({ date: d, key, count, increment });
+  }
+  const maxInc = Math.max(...days.map(d => d.increment), 1);
+  activityGrid.innerHTML = `
+    <div style="display:flex; gap:3px; height:60px; align-items:flex-end; padding: 8px 0 12px;">
+      ${days.map(d => {
+        const intensity = d.increment === 0 ? 0 : (0.25 + 0.75 * (d.increment / maxInc));
+        const height = d.increment === 0 ? 8 : 14 + (40 * (d.increment / maxInc));
+        const bg = d.increment === 0 ? 'var(--surface-alt)' : `rgba(27, 58, 92, ${intensity})`;
+        return `<div title="${d.date.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}: ${d.increment} question${d.increment !== 1 ? 's' : ''}" style="flex:1; height:${height}px; background:${bg}; border-radius:2px;"></div>`;
+      }).join('')}
+    </div>
+    <div style="display:flex; justify-content:space-between; font-size:10.5px; color:var(--ink-4); letter-spacing: 0.3px;">
+      <span>${days[0].date.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>
+      <span>Today</span>
+    </div>
+    <div style="margin-top: 14px; font-size: 12px; color: var(--ink-3);">
+      ${days.reduce((sum,d) => sum + d.increment, 0)} questions over the last 14 days
+    </div>
+  `;
+
+  renderChart(activityLog, totalQuestions);
+
+  ['critical','important','standard'].forEach(tier => {
+    const chapters = CHAPTERS.filter(c => c.tier === tier);
+    document.getElementById(`${tier}-count`).textContent = `${chapters.length} chapter${chapters.length !== 1 ? 's' : ''}`;
+    const html = [];
+    chapters.forEach(ch => {
+      ch.tests.forEach(test => {
+        const stats = getTestStats(test);
+        const isDisabled = test.comingSoon;
+        const progressHTML = test.comingSoon
+          ? `<div class="status-coming">In development</div>`
+          : stats.submitted
+            ? `<div class="nums">${stats.answered} / ${stats.total}</div><div class="status-complete">✓ Submitted</div>`
+            : stats.answered === 0
+              ? `<div class="nums" style="color: var(--ink-4);">0 / ${stats.total}</div><div class="pct">Not started</div>`
+              : `<div class="nums">${stats.answered} / ${stats.total}</div><div class="pct">${Math.round((stats.answered/stats.total)*100)}%</div>`;
+
+        html.push(`
+          <a class="chapter-row ${isDisabled ? 'disabled' : ''}" ${isDisabled ? '' : `href="${test.file}"`}>
+            <div class="tier-tag ${tier}">${tier === 'critical' ? 'T1' : tier === 'important' ? 'T2' : 'T3'}</div>
+            <div class="chapter-info">
+              <div class="title">${ch.title} — ${test.name}</div>
+              <div class="desc">${ch.desc}</div>
+            </div>
+            <div class="publisher-tag ${test.publisher}">${test.publisher}</div>
+            <div class="chapter-progress">${progressHTML}</div>
+            <div class="row-arrow">›</div>
+          </a>
+        `);
+      });
+    });
+    document.getElementById(`${tier}-list`).innerHTML = html.join('');
+  });
+
+  const now = new Date();
+  document.getElementById('footer-updated').textContent = `Refreshed ${now.toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})}`;
+}
+
+function renderChart(activityLog, target) {
+  const svg = document.getElementById('chart');
+  svg.innerHTML = '';
+  const W = 800, H = 260;
+  const pad = { top: 20, right: 30, bottom: 30, left: 50 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  const today = new Date();
+  const examDate = new Date(EXAM_DATE);
+  const startDate = new Date(today.getTime() - 30*24*60*60*1000);
+  const totalDays = Math.max(1, Math.ceil((examDate - startDate) / (1000*60*60*24)));
+  const todayIdx = Math.ceil((today - startDate) / (1000*60*60*24));
+
+  const maxY = Math.max(target, 10);
+
+  const points = [];
+  for (let i = 0; i <= todayIdx; i++) {
+    const d = new Date(startDate.getTime() + i*24*60*60*1000);
+    const key = d.toISOString().slice(0,10);
+    let val;
+    if (activityLog[key] != null) val = activityLog[key];
+    else val = i > 0 ? points[i-1].val : 0;
+    points.push({ idx: i, val, date: d });
+  }
+
+  const xScale = i => pad.left + (i/totalDays) * plotW;
+  const yScale = v => pad.top + plotH - (v/maxY) * plotH;
+
+  const elements = [];
+
+  // Grid + Y labels
+  const yGridSteps = 4;
+  for (let i = 0; i <= yGridSteps; i++) {
+    const yVal = (maxY * i) / yGridSteps;
+    const y = yScale(yVal);
+    elements.push(`<line x1="${pad.left}" x2="${W - pad.right}" y1="${y}" y2="${y}" stroke="rgba(0,0,0,0.05)" stroke-width="1"/>`);
+    elements.push(`<text x="${pad.left - 8}" y="${y + 3}" text-anchor="end" font-size="10" fill="#7A7972" font-family="Inter, sans-serif">${Math.round(yVal)}</text>`);
+  }
+
+  // X labels
+  const xLabels = [
+    { idx: 0, label: startDate.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) },
+    { idx: Math.floor(totalDays * 0.33), label: new Date(startDate.getTime() + Math.floor(totalDays*0.33)*24*60*60*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) },
+    { idx: Math.floor(totalDays * 0.66), label: new Date(startDate.getTime() + Math.floor(totalDays*0.66)*24*60*60*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) },
+    { idx: totalDays, label: '24 May (Exam)' }
+  ];
+  xLabels.forEach(l => {
+    elements.push(`<text x="${xScale(l.idx)}" y="${H - pad.bottom + 16}" text-anchor="middle" font-size="10" fill="#7A7972" font-family="Inter, sans-serif">${l.label}</text>`);
+  });
+
+  // Today marker
+  elements.push(`<line x1="${xScale(todayIdx)}" x2="${xScale(todayIdx)}" y1="${pad.top}" y2="${H - pad.bottom}" stroke="rgba(0,0,0,0.15)" stroke-width="1" stroke-dasharray="2,3"/>`);
+  elements.push(`<text x="${xScale(todayIdx)}" y="${pad.top - 6}" text-anchor="middle" font-size="9" fill="#7A7972" font-family="Inter, sans-serif" font-weight="600">TODAY</text>`);
+
+  // Target line
+  elements.push(`<line x1="${xScale(0)}" x2="${xScale(totalDays)}" y1="${yScale(0)}" y2="${yScale(target)}" stroke="#7A5A1F" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>`);
+
+  // Actual line
+  if (points.length > 1) {
+    const pathD = points.map((p,i) => `${i === 0 ? 'M' : 'L'} ${xScale(p.idx)} ${yScale(p.val)}`).join(' ');
+    const areaD = pathD + ` L ${xScale(points[points.length-1].idx)} ${yScale(0)} L ${xScale(0)} ${yScale(0)} Z`;
+    elements.push(`<path d="${areaD}" fill="#1B3A5C" opacity="0.08"/>`);
+    elements.push(`<path d="${pathD}" fill="none" stroke="#1B3A5C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`);
+    const lastP = points[points.length-1];
+    elements.push(`<circle cx="${xScale(lastP.idx)}" cy="${yScale(lastP.val)}" r="4" fill="#fff" stroke="#1B3A5C" stroke-width="2"/>`);
+    if (lastP.val > 0) {
+      elements.push(`<text x="${xScale(lastP.idx) + 10}" y="${yScale(lastP.val) + 4}" font-size="11" fill="#1B3A5C" font-family="Inter, sans-serif" font-weight="600">${lastP.val}</text>`);
+    }
+  } else if (points.length === 1) {
+    const lastP = points[0];
+    elements.push(`<circle cx="${xScale(lastP.idx)}" cy="${yScale(lastP.val)}" r="4" fill="#fff" stroke="#1B3A5C" stroke-width="2"/>`);
+  }
+
+  svg.innerHTML = elements.join('');
+}
+
+render();
+document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
+
+// ============================================================
+// BACKUP / IMPORT
+// ============================================================
+function showToast(message, duration) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), duration || 2500);
+}
+
+function exportData() {
+  // Gather all relevant localStorage keys
+  const allStorageKeys = [];
+  CHAPTERS.forEach(ch => {
+    ch.tests.forEach(test => {
+      if (test.storageKey) allStorageKeys.push(test.storageKey);
+    });
+  });
+  allStorageKeys.push(ACTIVITY_STORAGE_KEY);
+
+  const backup = {
+    exportedAt: new Date().toISOString(),
+    user: 'Muhammad',
+    examDate: '2026-05-24',
+    version: 1,
+    data: {}
+  };
+
+  allStorageKeys.forEach(key => {
+    const value = localStorage.getItem(key);
+    if (value !== null) backup.data[key] = value;
+  });
+
+  // Trigger download
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const dateStr = new Date().toISOString().slice(0, 10);
+  a.download = `fa-progress-backup-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  const itemCount = Object.keys(backup.data).length;
+  showToast(`Backup saved · ${itemCount} item${itemCount !== 1 ? 's' : ''}`);
+}
+
+function importData(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const backup = JSON.parse(e.target.result);
+      if (!backup.data || typeof backup.data !== 'object') {
+        showToast('Invalid backup file', 3500);
+        return;
+      }
+
+      const proceed = confirm(
+        'This will REPLACE your current progress with the backup data.\n\n' +
+        'Backup contains ' + Object.keys(backup.data).length + ' item(s) from ' +
+        (backup.exportedAt ? new Date(backup.exportedAt).toLocaleString('en-GB') : 'unknown date') + '.\n\n' +
+        'Continue?'
+      );
+      if (!proceed) {
+        inputEl.value = '';
+        return;
+      }
+
+      Object.keys(backup.data).forEach(key => {
+        localStorage.setItem(key, backup.data[key]);
+      });
+
+      showToast('Progress restored · refreshing dashboard...', 2000);
+      setTimeout(() => { window.location.reload(); }, 1200);
+
+    } catch(err) {
+      showToast('Failed to read backup file', 3500);
+      console.error(err);
+    }
+    inputEl.value = '';
+  };
+  reader.readAsText(file);
+}
+</script>
+</body>
+</html>
